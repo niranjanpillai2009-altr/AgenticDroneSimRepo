@@ -42,6 +42,30 @@ docs/
 Modules marked *(stub)* are placeholders for the next phase (communication,
 faults, roles, metrics). The refactor added structure, not new behavior.
 
+## High-level skills (Phase 3)
+
+The agent's main interface is a set of mission-oriented skills, not low-level
+directional commands. Each skill has a typed command (its parameters) and a
+formal contract (preconditions, success/failure, timeout, abort behavior,
+expected state change), and returns a structured `SkillResult`
+(`success | failed | aborted | timeout`, timing, final position, error code).
+
+Skills: `TAKE_OFF`, `GO_TO_WAYPOINT`, `FOLLOW_WAYPOINTS`, `SEARCH_REGION`,
+`INSPECT_POINT`, `HOLD_POSITION`, `RENDEZVOUS`, `ACT_AS_RELAY`, `RETURN_HOME`,
+`LAND`, `EMERGENCY_HOLD` (defined in `agentic_uav/control/skills.py`, executed by
+`control/skill_executor.py`, built on waypoint + heading navigation in the
+adapters).
+
+Run the exit-criterion demo (4 drones take off, go to distinct waypoints, hold,
+return, land) with no simulator needed:
+
+```
+python scripts/phase3_demo.py            # deterministic, on the kinematic mock
+python scripts/phase3_demo.py --adapter airsim   # fly it for real
+```
+
+Skill unit tests (no sim, no LLM): `python tests/test_skills.py`
+
 ## Quick start
 
 Run a mission with no simulator and no LLM (fast, deterministic):

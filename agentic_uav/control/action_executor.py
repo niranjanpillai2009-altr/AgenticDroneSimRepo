@@ -28,7 +28,7 @@ class ActionExecutor:
         for command in decision.plan:
             result = self.adapter.execute_skill(vehicle_id, command)
             results.append(result)
-            if result.status is SkillStatus.FAILURE:
+            if result.status is SkillStatus.FAILED:
                 # A failed skill stops this drone's plan (its own concern; other
                 # drones are unaffected). Future work may replan instead.
                 break
